@@ -15,7 +15,7 @@ enum pages: Identifiable{
     case page2
     case page3
 }
-
+//CHEKING GIT
 struct ContentView: View {
     
     @State private var activepage: pages?
