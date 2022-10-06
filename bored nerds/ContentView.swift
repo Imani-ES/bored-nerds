@@ -11,9 +11,9 @@ enum pages: Identifiable{
     var id: Int {
         self.hashValue
     }
-    case page1
-    case page2
-    case page3
+    case _about
+    case _settings
+    case _playground
 }
 //CHEKING GIT
 struct ContentView: View {
@@ -26,13 +26,13 @@ struct ContentView: View {
                 .padding()
             
             Button("Open page 1"){
-                activepage = .page1
+                activepage = ._about
             }
             Button("Open page 2"){
-                activepage = .page2
+                activepage = ._settings
             }
             Button("Open page 3"){
-                activepage = .page3
+                activepage = ._playground
             }
             
             
@@ -40,27 +40,12 @@ struct ContentView: View {
         }
         .sheet(item: $activepage){item in
             switch item{
-                case .page1:
-                    Text("Hello, 1!")
-                        .padding()
-                    
-                    Button("Open page 2"){
-                        activepage = .page2
-                    }
-                case .page2:
-                    Text("Hello, 2!")
-                        .padding()
-                    
-                    Button("Open page 1"){
-                        activepage = .page1
-                    }
-                case .page3:
-                    Text("Hello, 3!")
-                        .padding()
-                    
-                    Button("Open page 1"){
-                        activepage = .page1
-                    }
+                case ._about:
+                    About()
+                case ._settings:
+                    Settings()
+                case ._playground:
+                    Playground()
                 }
                 
             }

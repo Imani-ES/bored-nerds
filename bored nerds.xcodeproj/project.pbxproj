@@ -10,10 +10,13 @@
 		AA11F66D28ED017600D6567E /* bored_nerdsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11F66C28ED017600D6567E /* bored_nerdsApp.swift */; };
 		AA11F66F28ED017600D6567E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11F66E28ED017600D6567E /* ContentView.swift */; };
 		AA11F67128ED018100D6567E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11F67028ED018100D6567E /* Assets.xcassets */; };
-		AA11F67428ED018100D6567E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11F67328ED018100D6567E /* Preview Assets.xcassets */; };
 		AA11F67E28ED018300D6567E /* bored_nerdsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11F67D28ED018300D6567E /* bored_nerdsTests.swift */; };
 		AA11F68828ED018300D6567E /* bored_nerdsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11F68728ED018300D6567E /* bored_nerdsUITests.swift */; };
 		AA11F68A28ED018300D6567E /* bored_nerdsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11F68928ED018300D6567E /* bored_nerdsUITestsLaunchTests.swift */; };
+		AA4C1B8A28EE609C001D274A /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8928EE609C001D274A /* About.swift */; };
+		AA4C1B8C28EE60B8001D274A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8B28EE60B8001D274A /* Settings.swift */; };
+		AA4C1B8E28EE60D0001D274A /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8D28EE60D0001D274A /* Playground.swift */; };
+		AA4C1B9028EE6768001D274A /* sensors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8F28EE6767001D274A /* sensors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,12 +41,15 @@
 		AA11F66C28ED017600D6567E /* bored_nerdsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bored_nerdsApp.swift; sourceTree = "<group>"; };
 		AA11F66E28ED017600D6567E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA11F67028ED018100D6567E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AA11F67328ED018100D6567E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AA11F67928ED018300D6567E /* bored nerdsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bored nerdsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA11F67D28ED018300D6567E /* bored_nerdsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bored_nerdsTests.swift; sourceTree = "<group>"; };
 		AA11F68328ED018300D6567E /* bored nerdsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bored nerdsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA11F68728ED018300D6567E /* bored_nerdsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bored_nerdsUITests.swift; sourceTree = "<group>"; };
 		AA11F68928ED018300D6567E /* bored_nerdsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bored_nerdsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AA4C1B8928EE609C001D274A /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
+		AA4C1B8B28EE60B8001D274A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		AA4C1B8D28EE60D0001D274A /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
+		AA4C1B8F28EE6767001D274A /* sensors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sensors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,18 +102,13 @@
 			children = (
 				AA11F66C28ED017600D6567E /* bored_nerdsApp.swift */,
 				AA11F66E28ED017600D6567E /* ContentView.swift */,
+				AA4C1B8928EE609C001D274A /* About.swift */,
+				AA4C1B8B28EE60B8001D274A /* Settings.swift */,
+				AA4C1B8D28EE60D0001D274A /* Playground.swift */,
+				AA4C1B8F28EE6767001D274A /* sensors.swift */,
 				AA11F67028ED018100D6567E /* Assets.xcassets */,
-				AA11F67228ED018100D6567E /* Preview Content */,
 			);
 			path = "bored nerds";
-			sourceTree = "<group>";
-		};
-		AA11F67228ED018100D6567E /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				AA11F67328ED018100D6567E /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		AA11F67C28ED018300D6567E /* bored nerdsTests */ = {
@@ -231,7 +232,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA11F67428ED018100D6567E /* Preview Assets.xcassets in Resources */,
 				AA11F67128ED018100D6567E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,7 +258,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA11F66F28ED017600D6567E /* ContentView.swift in Sources */,
+				AA4C1B8A28EE609C001D274A /* About.swift in Sources */,
+				AA4C1B8E28EE60D0001D274A /* Playground.swift in Sources */,
+				AA4C1B9028EE6768001D274A /* sensors.swift in Sources */,
 				AA11F66D28ED017600D6567E /* bored_nerdsApp.swift in Sources */,
+				AA4C1B8C28EE60B8001D274A /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
