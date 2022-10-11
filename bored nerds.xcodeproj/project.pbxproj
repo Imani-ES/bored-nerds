@@ -16,7 +16,7 @@
 		AA4C1B8A28EE609C001D274A /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8928EE609C001D274A /* About.swift */; };
 		AA4C1B8C28EE60B8001D274A /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8B28EE60B8001D274A /* Settings.swift */; };
 		AA4C1B8E28EE60D0001D274A /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8D28EE60D0001D274A /* Playground.swift */; };
-		AA4C1B9028EE6768001D274A /* sensors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4C1B8F28EE6767001D274A /* sensors.swift */; };
+		AA527C0028F61137006C7EC8 /* Toolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA527BFF28F61136006C7EC8 /* Toolkit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +49,7 @@
 		AA4C1B8928EE609C001D274A /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		AA4C1B8B28EE60B8001D274A /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		AA4C1B8D28EE60D0001D274A /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
-		AA4C1B8F28EE6767001D274A /* sensors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sensors.swift; sourceTree = "<group>"; };
+		AA527BFF28F61136006C7EC8 /* Toolkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolkit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +105,8 @@
 				AA4C1B8928EE609C001D274A /* About.swift */,
 				AA4C1B8B28EE60B8001D274A /* Settings.swift */,
 				AA4C1B8D28EE60D0001D274A /* Playground.swift */,
-				AA4C1B8F28EE6767001D274A /* sensors.swift */,
 				AA11F67028ED018100D6567E /* Assets.xcassets */,
+				AA527BFF28F61136006C7EC8 /* Toolkit.swift */,
 			);
 			path = "bored nerds";
 			sourceTree = "<group>";
@@ -257,10 +257,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA527C0028F61137006C7EC8 /* Toolkit.swift in Sources */,
 				AA11F66F28ED017600D6567E /* ContentView.swift in Sources */,
 				AA4C1B8A28EE609C001D274A /* About.swift in Sources */,
 				AA4C1B8E28EE60D0001D274A /* Playground.swift in Sources */,
-				AA4C1B9028EE6768001D274A /* sensors.swift in Sources */,
 				AA11F66D28ED017600D6567E /* bored_nerdsApp.swift in Sources */,
 				AA4C1B8C28EE60B8001D274A /* Settings.swift in Sources */,
 			);
@@ -423,6 +423,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"bored nerds/Preview Content\"";
+				DEVELOPMENT_TEAM = KU2F82PUX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -435,7 +436,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "chicken-mani.bored-nerds";
+				PRODUCT_BUNDLE_IDENTIFIER = "bored-nerds";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -451,6 +452,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"bored nerds/Preview Content\"";
+				DEVELOPMENT_TEAM = KU2F82PUX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -463,7 +465,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "chicken-mani.bored-nerds";
+				PRODUCT_BUNDLE_IDENTIFIER = "bored-nerds";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

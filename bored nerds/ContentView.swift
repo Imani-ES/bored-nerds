@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import CoreMotion
+
+let motionManager = CMMotionManager()
 
 enum pages: Identifiable{
     var id: Int {

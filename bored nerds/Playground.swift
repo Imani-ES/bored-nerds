@@ -7,12 +7,9 @@
 
 import SwiftUI
 //maybe chartview: https://github.com/AppPear/ChartView.git
-import CoreMotion
 
 struct Playground: View {
-    //set up motion manager
-    let motionManager = CMMotionManager()
-    let queue = OperationQueue()
+    
     
     var body: some View {
         VStack{
@@ -20,7 +17,7 @@ struct Playground: View {
         }
         .onAppear{
             //get motion manager going
-            self.motionManager.startDeviceMotionUpdates(to: self.queue){ (data: CMDeviceMotion?, error: Error?) in
+            //self.motionManager.startDeviceMotionUpdates(to: self.queue){ (data: CMDeviceMotion?, error: Error?) in
                 //set up each
                 
                 
@@ -29,7 +26,6 @@ struct Playground: View {
     
     }
     
-}
 
 struct Playground_Previews: PreviewProvider {
     static var previews: some View {
