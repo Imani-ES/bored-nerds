@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+//Used in Settings and Playground Sheet
 class sensor {
     var didChange = PassthroughSubject<Void,Never>()
     
@@ -35,9 +36,24 @@ class sensor {
         return self.sensing
     }
     
-    func update()
+    func update(data:[Double]) -> String {
+        self.out_1.append(data[0])
+        self.out_2.append(data[1])
+        self.out_3.append(data[2])
+        return "Updated Successfully"
+    }
+    
+    func show() -> [Double]{
+        return [out_1.last ?? 0.0, out_2.last ?? 0.0, out_3.last ?? 0.0]
+    }
+    
 }
 
+let Dummy = sensor(name: "Dummy", outputs: 1)
+let Accel = sensor(name: "Accelerometer", outputs: 3)
+let Gyros = sensor(name: "Gyroscope", outputs: 2)
+
+//Used in Playground Sheet
 class display{
     var didChange = PassthroughSubject<Void,Never>()
     let name: String
@@ -51,14 +67,14 @@ class display{
     
     init(name:String, sensor_1:sensor, sensor_2: sensor, operation:Int){
         self.name = name
-        self.sensor_1 = sensor_1
-        self.sensor_2 = sensor_2
+        self.sensor_1 = Dummy
+        self.sensor_2 = Dummy
         self.operation = operation
     }
+    
+    // Takes in sensor, attempts to add sensor to display.
+    // If display is full, return false error message, else return good.
     func add_sensor(sensor:sensor) -> Int{
-//        Takes in sensor, attempts to add sensor to display.
-//        If display is full, return false error message, else return good.
-        
         if self.sensor_1.name == "Dummy"{
             self.sensor_1 = sensor
             return 0
@@ -69,14 +85,19 @@ class display{
         }
         return 1
     }
-    func show(){
+    
+    //Output of display goes straight into graph in "Playground" sheet
+    func show() -> [Double]{
+        let s_1: [Double] = self.sensor_1.show()
+        let s_2: [Double] = self.sensor_2.show()
         if operation == 0{
-            out_1 = sensor_1.out_1.last + sensor_2.out_1.last
-            out_2 = sensor_1.out_2.last + sensor_2.out_2.last
-            out_3 = sensor_1.out_3.last + sensor_2.out_3.last
+            return [s_1[0],s_1[1],s_1[2]]
         }
-                
         
-        
+        else if operation == 1{
+            return [s_1[0] + s_2[0],s_1[1] + s_2[1],s_1[2] + s_2[2]]
+        }
+        return [0.0]
     }
+    
 }
