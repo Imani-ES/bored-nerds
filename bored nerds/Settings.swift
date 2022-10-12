@@ -10,6 +10,7 @@ import SwiftUI
 struct Settings: View {
     var body: some View {
         Text("Settings")
+        Text(sensor_list.accelerometer.sensing)
     }
 }
 

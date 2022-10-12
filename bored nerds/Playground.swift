@@ -15,6 +15,7 @@ struct Playground: View {
         VStack{
             Text("Playground")
         }
+        Text(sensor_list.accelerometer.sensing)
         .onAppear{
             //get motion manager going
             //self.motionManager.startDeviceMotionUpdates(to: self.queue){ (data: CMDeviceMotion?, error: Error?) in

@@ -12,7 +12,7 @@ struct About: View {
         VStack{
             Text("The About page")
         }
-        
+        Text(sensor_list.accelerometer.sensing)
     }
 }
 
