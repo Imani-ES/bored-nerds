@@ -7,22 +7,26 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-//Used in Settings and Playground Sheet
-class sensor {
+class sensor: ObservableObject  {
     var didChange = PassthroughSubject<Void,Never>()
     
     let name :String
-    let outputs: Int
+    let out_1_name: String
+    let out_2_name: String
+    let out_3_name: String
     
     var sensing: String = "False"
-    var out_1: [Double] = [0.0]
-    var out_2: [Double] = [0.0]
-    var out_3: [Double] = [0.0]
+    private var out_1: [Double] = [0.0] { didSet {didChange.send()}}
+    private var out_2: [Double] = [0.0] { didSet {didChange.send()}}
+    private var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     
-    init(name:String,outputs:Int){
+    init(name:String, out_1_name:String, out_2_name:String,out_3_name:String){
         self.name = name
-        self.outputs = outputs
+        self.out_1_name = out_1_name
+        self.out_2_name = out_2_name
+        self.out_3_name = out_3_name
     }
     
     func start(sensor_availability:Bool) -> String{
@@ -49,26 +53,18 @@ class sensor {
     
 }
 
-let Dummy = sensor(name: "Dummy", outputs: 1)
-let Accel = sensor(name: "Accelerometer", outputs: 3)
-let Gyros = sensor(name: "Gyroscope", outputs: 2)
-
-//Used in Playground Sheet
-class display{
+class display: ObservableObject {
     var didChange = PassthroughSubject<Void,Never>()
-    let name: String
-    var sensor_1: sensor
-    var sensor_2: sensor
-    var operation: Int = 0
     
-    var out_1: Double = 0.0
-    var out_2: Double = 0.0
-    var out_3: Double = 0.0
+    let name: String
+    var sensor_1: sensor{ didSet {didChange.send()}}
+    var sensor_2: sensor{ didSet {didChange.send()}}
+    var operation: Int{ didSet {didChange.send()}}
     
     init(name:String, sensor_1:sensor, sensor_2: sensor, operation:Int){
         self.name = name
-        self.sensor_1 = Dummy
-        self.sensor_2 = Dummy
+        self.sensor_1 = sensor_1
+        self.sensor_2 = sensor_2
         self.operation = operation
     }
     
@@ -101,3 +97,21 @@ class display{
     }
     
 }
+
+class sensors{
+    var didChange = PassthroughSubject<Void,Never>()
+    
+    let accelerometer: sensor
+    let Dummy: sensor
+    let Display: display
+    
+    init(){
+        self.accelerometer = sensor(name: "Accelerometer", out_1_name: "Pitch", out_2_name: "Yaw", out_3_name: "Roll")
+        
+        self.Dummy = sensor(name: "Dummy", out_1_name: "Dumb", out_2_name: "Dumb", out_3_name: "Dumb")
+        
+        self.Display = display(name: "display", sensor_1: Dummy, sensor_2: Dummy, operation: 0)
+    }
+}
+
+let sensor_list = sensors()

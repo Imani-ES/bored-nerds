@@ -18,6 +18,7 @@ enum pages: Identifiable{
     case _settings
     case _playground
 }
+
 //CHEKING GIT
 struct ContentView: View {
     
@@ -37,6 +38,7 @@ struct ContentView: View {
             Button("Open page 3"){
                 activepage = ._playground
             }
+            Text(sensor_list.accelerometer.sensing)
             
             
             
