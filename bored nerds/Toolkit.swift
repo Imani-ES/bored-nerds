@@ -15,18 +15,18 @@ class sensor: ObservableObject  {
     let name :String
     let out_1_name: String
     let out_2_name: String
-    let out_3_name: String
-    
+    let out_3_name: String    
     var sensing: String = "False"
+    
     private var out_1: [Double] = [0.0] { didSet {didChange.send()}}
     private var out_2: [Double] = [0.0] { didSet {didChange.send()}}
     private var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     
-    init(name:String, out_1_name:String, out_2_name:String,out_3_name:String){
+    init(name:String){
         self.name = name
-        self.out_1_name = out_1_name
-        self.out_2_name = out_2_name
-        self.out_3_name = out_3_name
+        self.out_1_name = X
+        self.out_2_name = Y
+        self.out_3_name = Z
     }
     
     func start(sensor_availability:Bool) -> String{
@@ -52,6 +52,10 @@ class sensor: ObservableObject  {
     }
     
 }
+
+//Maybe have different class for movement sensors in future.
+//class movement_sensor: sensor { }
+
 
 class display: ObservableObject {
     var didChange = PassthroughSubject<Void,Never>()
@@ -120,9 +124,9 @@ class sensors{
     let Display: display
     
     init(){
-        self.accelerometer = sensor(name: "Accelerometer", out_1_name: "Pitch", out_2_name: "Yaw", out_3_name: "Roll")
+        self.accelerometer = sensor(name: "Accelerometer")
         
-        self.Dummy = sensor(name: "Dummy", out_1_name: "Dumb", out_2_name: "Dumb", out_3_name: "Dumb")
+        self.Dummy = sensor(name: "Dummy")
         
         self.Display = display(name: "display", sensor_1: Dummy, sensor_2: Dummy, operation: 0)
     }
