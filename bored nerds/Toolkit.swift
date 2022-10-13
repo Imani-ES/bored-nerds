@@ -82,6 +82,20 @@ class display: ObservableObject {
         return 1
     }
     
+    // Takes in sensor, attempts to add sensor to display.
+    // If display is full, return false error message, else return good.
+    func remove_sensor(sensor:sensor) -> Int{
+        if self.sensor_1 == sensor{
+            self.sensor_1 = Dummy
+            return 0
+        }
+        else if self.sensor_2.name == sensor{
+            self.sensor_2 = Dummy
+            return 0
+        }
+        return 1
+    }
+    
     //Output of display goes straight into graph in "Playground" sheet
     func show() -> [Double]{
         let s_1: [Double] = self.sensor_1.show()
