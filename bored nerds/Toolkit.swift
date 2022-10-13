@@ -8,25 +8,29 @@
 import Foundation
 import Combine
 import SwiftUI
+import CoreMotion
 
+//Sensor object that all sensors will be created from
 class sensor: ObservableObject  {
     var didChange = PassthroughSubject<Void,Never>()
     
     let name :String
-    let out_1_name: String
-    let out_2_name: String
-    let out_3_name: String    
-    var sensing: String = "False"
+    let type :String
+    let val_1_name: String
+    let val_2_name: String
+    let val_3_name: String
+    var sensing: String = "False"{ didSet {didChange.send()}}
     
     private var out_1: [Double] = [0.0] { didSet {didChange.send()}}
     private var out_2: [Double] = [0.0] { didSet {didChange.send()}}
     private var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     
-    init(name:String){
+    init(name:String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
         self.name = name
-        self.out_1_name = X
-        self.out_2_name = Y
-        self.out_3_name = Z
+        self.type = type
+        self.val_1_name = val_1_name
+        self.val_2_name = val_2_name
+        self.val_3_name = val_3_name
     }
     
     func start(sensor_availability:Bool) -> String{
@@ -50,13 +54,14 @@ class sensor: ObservableObject  {
     func show() -> [Double]{
         return [out_1.last ?? 0.0, out_2.last ?? 0.0, out_3.last ?? 0.0]
     }
-    
+    //Maybe have different class for movement sensors in future.
+    //class movement_sensor: sensor { }
 }
 
-//Maybe have different class for movement sensors in future.
-//class movement_sensor: sensor { }
+//default sensor
+let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
 
-
+//display object used to keep track of user selected sensors
 class display: ObservableObject {
     var didChange = PassthroughSubject<Void,Never>()
     
@@ -79,7 +84,7 @@ class display: ObservableObject {
             self.sensor_1 = sensor
             return 0
         }
-        else if self.sensor_2.name == "Dummy" && self.sensor_1.name != "Accelerometer"{
+        else if self.sensor_2.name == "Dummy"{
             self.sensor_2 = sensor
             return 0
         }
@@ -89,12 +94,12 @@ class display: ObservableObject {
     // Takes in sensor, attempts to add sensor to display.
     // If display is full, return false error message, else return good.
     func remove_sensor(sensor:sensor) -> Int{
-        if self.sensor_1 == sensor{
-            self.sensor_1 = Dummy
+        if self.sensor_1.name == sensor.name{
+            self.sensor_1 = dummy
             return 0
         }
-        else if self.sensor_2.name == sensor{
-            self.sensor_2 = Dummy
+        else if self.sensor_2.name == sensor.name{
+            self.sensor_2 = dummy
             return 0
         }
         return 1
@@ -116,20 +121,21 @@ class display: ObservableObject {
     
 }
 
+//Sensors object used to keep track of all sensors
 class sensors{
     var didChange = PassthroughSubject<Void,Never>()
     
     let accelerometer: sensor
-    let Dummy: sensor
+    let Dummy: sensor = dummy
     let Display: display
     
     init(){
-        self.accelerometer = sensor(name: "Accelerometer")
-        
-        self.Dummy = sensor(name: "Dummy")
+        self.accelerometer = sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll")
         
         self.Display = display(name: "display", sensor_1: Dummy, sensor_2: Dummy, operation: 0)
     }
 }
 
+//list of sensors used by app
 let sensor_list = sensors()
+

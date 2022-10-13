@@ -8,9 +8,16 @@
 import SwiftUI
 
 struct Settings: View {
+    @State var accel_data = sensor_list.accelerometer.show()
     var body: some View {
-        Text("Settings")
-        Text(sensor_list.accelerometer.sensing)
+        VStack{
+            Text("Settings")
+            Text("Accelerometer:")
+            Text(sensor_list.accelerometer.val_1_name + ":" + String(accel_data[0]))
+            Text(sensor_list.accelerometer.val_2_name + ":" + String(accel_data[1]))
+            Text(sensor_list.accelerometer.val_3_name + ":" + String(accel_data[2]))
+        }
+        
     }
 }
 

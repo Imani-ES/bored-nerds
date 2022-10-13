@@ -8,8 +8,8 @@
 import SwiftUI
 import CoreMotion
 
-let motionManager = CMMotionManager()
 
+//Create sheet links
 enum pages: Identifiable{
     var id: Int {
         self.hashValue
@@ -19,7 +19,7 @@ enum pages: Identifiable{
     case _playground
 }
 
-//CHEKING GIT
+
 struct ContentView: View {
     
     @State private var activepage: pages?
@@ -29,18 +29,27 @@ struct ContentView: View {
             Text("Hello, world!")
                 .padding()
             
-            Button("Open page 1"){
+            Button("About Page"){
                 activepage = ._about
             }
-            Button("Open page 2"){
+            Button("Settings"){
                 activepage = ._settings
             }
-            Button("Open page 3"){
+            Button("Playground"){
                 activepage = ._playground
             }
+            
             Text(sensor_list.accelerometer.sensing)
             
             
+            .onAppear{
+                motionmanager.startDeviceMotionUpdates(to: motion_queue){(data: CMDeviceMotion?, error: Error?) in
+                    let attitude: CMAttitude = data!.attitude
+                    
+                    print(sensor_list.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll]))
+                    
+                }
+            }
             
         }
         .sheet(item: $activepage){item in
@@ -55,7 +64,8 @@ struct ContentView: View {
                 
             }
             
-        }
+    }
+    
     
 }
 
