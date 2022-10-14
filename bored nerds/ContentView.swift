@@ -14,15 +14,15 @@ enum pages: Identifiable{
     var id: Int {
         self.hashValue
     }
-    case _main
     case _about
     case _settings
     case _playground
 }
 
-var activepage: pages = ._main
 
 struct ContentView: View {
+    
+    @State private var activepage: pages?
     
     var body: some View {
         VStack{
