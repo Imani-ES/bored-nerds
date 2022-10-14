@@ -14,15 +14,15 @@ enum pages: Identifiable{
     var id: Int {
         self.hashValue
     }
+    case _main
     case _about
     case _settings
     case _playground
 }
 
+var activepage: pages = ._main
 
 struct ContentView: View {
-    
-    @State private var activepage: pages?
     
     var body: some View {
         VStack{
@@ -40,16 +40,6 @@ struct ContentView: View {
             }
             
             Text(sensor_list.accelerometer.sensing)
-            
-            
-            .onAppear{
-                motionmanager.startDeviceMotionUpdates(to: motion_queue){(data: CMDeviceMotion?, error: Error?) in
-                    let attitude: CMAttitude = data!.attitude
-                    
-                    print(sensor_list.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll]))
-                    
-                }
-            }
             
         }
         .sheet(item: $activepage){item in

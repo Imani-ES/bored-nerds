@@ -11,6 +11,9 @@ struct About: View {
     var body: some View {
         VStack{
             Text("The About page")
+            Button("home"){
+                
+            }
         }
         Text(sensor_list.accelerometer.sensing)
     }

@@ -31,6 +31,7 @@ class sensor: ObservableObject  {
         self.val_1_name = val_1_name
         self.val_2_name = val_2_name
         self.val_3_name = val_3_name
+        print("Initialized " + name)
     }
     
     func start(sensor_availability:Bool) -> String{
@@ -75,6 +76,7 @@ class display: ObservableObject {
         self.sensor_1 = sensor_1
         self.sensor_2 = sensor_2
         self.operation = operation
+        print("Initialized " + name)
     }
     
     // Takes in sensor, attempts to add sensor to display.
@@ -125,17 +127,49 @@ class display: ObservableObject {
 class sensors{
     var didChange = PassthroughSubject<Void,Never>()
     
-    let accelerometer: sensor
+    //Set up Motion Manager
+    let motionmanager = CMMotionManager()
+    let motion_queue = OperationQueue()
+
+    
+    //Set up sensors
     let Dummy: sensor = dummy
+    let accelerometer: sensor
+    let gyroscope: sensor
+    let magnetometer: sensor
+    
     let Display: display
     
     init(){
+        //Initialize sensors
         self.accelerometer = sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll")
         
         self.Display = display(name: "display", sensor_1: Dummy, sensor_2: Dummy, operation: 0)
+        
+        self.gyroscope = sensor(name: "Gyroscope", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
+        
+        self.magnetometer = sensor(name: "Magnetometer", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
+        
+        //Begin Sensing
+        self.begin_motion_sensing()
+    }
+    
+    //Fetch Sensor Data from device
+    func begin_motion_sensing(){
+        self.motionmanager.startDeviceMotionUpdates(to: self.motion_queue){(data: CMDeviceMotion?, error: Error?) in
+            let attitude: CMAttitude = data!.attitude
+            let gyro: CMRotationRate = data!.rotationRate
+            let mag_field: CMMagneticField = data!.magneticField.field
+            
+            //Update sensor objects
+            print(self.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll]))
+            print(self.gyroscope.update(data: [gyro.x,gyro.y,gyro.z]))
+            print(self.magnetometer.update(data: [mag_field.x,mag_field.y,mag_field.z]))
+        }
+        print("Now sensing motion")
     }
 }
 
-//list of sensors used by app
+//sensor group object used by app
 let sensor_list = sensors()
 
