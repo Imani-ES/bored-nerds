@@ -9,7 +9,7 @@ import SwiftUI
 //maybe chartview: https://github.com/AppPear/ChartView.git
 
 struct Playground: View {
-    
+    @EnvironmentObject var sensor_list: sensors
     
     var body: some View {
         VStack{

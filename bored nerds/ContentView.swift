@@ -21,7 +21,7 @@ enum pages: Identifiable{
 
 
 struct ContentView: View {
-    
+    @EnvironmentObject var sensor_list: sensors
     @State private var activepage: pages?
     
     var body: some View {

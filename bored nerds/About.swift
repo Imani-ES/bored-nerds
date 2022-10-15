@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct About: View {
+    @EnvironmentObject var sensor_list: sensors
+    
     var body: some View {
         VStack{
             Text("The About page")

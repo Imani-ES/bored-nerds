@@ -21,9 +21,11 @@ class sensor: ObservableObject  {
     let val_3_name: String
     var sensing: String = "False"{ didSet {didChange.send()}}
     
-    private var out_1: [Double] = [0.0] { didSet {didChange.send()}}
-    private var out_2: [Double] = [0.0] { didSet {didChange.send()}}
-    private var out_3: [Double] = [0.0] { didSet {didChange.send()}}
+    var out_1: [Double] = [0.0] { didSet {didChange.send()}}
+    var out_2: [Double] = [0.0] { didSet {didChange.send()}}
+    var out_3: [Double] = [0.0] { didSet {didChange.send()}}
+    
+    @Published var outs: [Double] = [0.0,0.0,0.0] { didSet {didChange.send()}}
     
     init(name:String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
         self.name = name
@@ -46,6 +48,7 @@ class sensor: ObservableObject  {
     }
     
     func update(data:[Double]) -> String {
+        self.outs = [data[0],data[1],data[2]]
         self.out_1.append(data[0])
         self.out_2.append(data[1])
         self.out_3.append(data[2])
@@ -55,12 +58,12 @@ class sensor: ObservableObject  {
     func show() -> [Double]{
         return [out_1.last ?? 0.0, out_2.last ?? 0.0, out_3.last ?? 0.0]
     }
+    
     //Maybe have different class for movement sensors in future.
     //class movement_sensor: sensor { }
 }
 
-//default sensor
-let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
+
 
 //display object used to keep track of user selected sensors
 class display: ObservableObject {
@@ -123,8 +126,11 @@ class display: ObservableObject {
     
 }
 
+//default sensor
+let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
+
 //Sensors object used to keep track of all sensors
-class sensors{
+@MainActor class sensors: ObservableObject{
     var didChange = PassthroughSubject<Void,Never>()
     
     //Set up Motion Manager
@@ -133,22 +139,25 @@ class sensors{
 
     
     //Set up sensors
-    let Dummy: sensor = dummy
-    let accelerometer: sensor
-    let gyroscope: sensor
-    let magnetometer: sensor
+    @Published var Dummy: sensor
+    @Published var accelerometer: sensor
+    @Published var gyroscope: sensor
+    @Published var magnetometer: sensor
     
     let Display: display
     
     init(){
+        //default sensor
+        self.Dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
+        
         //Initialize sensors
         self.accelerometer = sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll")
-        
-        self.Display = display(name: "display", sensor_1: Dummy, sensor_2: Dummy, operation: 0)
         
         self.gyroscope = sensor(name: "Gyroscope", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
         
         self.magnetometer = sensor(name: "Magnetometer", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
+        
+        self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         
         //Begin Sensing
         self.begin_motion_sensing()
@@ -171,5 +180,5 @@ class sensors{
 }
 
 //sensor group object used by app
-let sensor_list = sensors()
+//let sensor_list = sensors()
 
