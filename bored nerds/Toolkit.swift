@@ -49,14 +49,19 @@ class sensor: ObservableObject  {
     
     func update(data:[Double]) -> String {
         self.outs = [data[0],data[1],data[2]]
-        self.out_1.append(data[0])
-        self.out_2.append(data[1])
+        
+        self.out_1.append(data[0])        
+        self.out_2.append(data[1])            
         self.out_3.append(data[2])
-        return "Updated Successfully"
+        
+        if out_1.count > 60:
+            self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
+        
+        return "Updated Successfully: \(self.show())"
     }
     
     func show() -> [Double]{
-        return [out_1.last ?? 0.0, out_2.last ?? 0.0, out_3.last ?? 0.0]
+        return self.outs
     }
     
     //Maybe have different class for movement sensors in future.
