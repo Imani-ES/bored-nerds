@@ -9,10 +9,10 @@ import SwiftUI
 
 struct Settings: View {
     @EnvironmentObject var sensor_list: sensors
-//    //var accel_outs = sensor_list.accelerometer.outs
-//    let gyro_data = sensor_list.gyroscope
-//    let mag_data = sensor_list.magnetometer
-//
+    
+    //Set up vars to hold sensor vals from timer
+    @State acc_data: String = "Loading..."
+    
     var body: some View {
         
         VStack{
@@ -22,22 +22,21 @@ struct Settings: View {
             Group {
                 Text("Accelerometer:")
                 Text(sensor_list.accelerometer.name + ":" + String(sensor_list.accelerometer.outs))
-//                Text(accel_data.val_2_name + ":" + String($accel_outs[1]))
-//                Text(accel_data.val_3_name + ":" + String($accel_outs[2]))
-//
-                Text("Gyroscope:")
-//                Text(gyro_data.val_1_name + ":" + String(gyro_data.show()[0]))
-//                Text(gyro_data.val_2_name + ":" + String(gyro_data.show()[1]))
-//                Text(gyro_data.val_3_name + ":" + String(gyro_data.show()[2]))
-//
-                Text("Magnetometer:")
-//                Text(mag_data.val_1_name + ":" + String(mag_data.show()[0]))
-//                Text(mag_data.val_2_name + ":" + String(mag_data.show()[1]))
-//                Text(mag_data.val_3_name + ":" + String(mag_data.show()[2]))
+                //Output vars with timer data
+                Text(acc_data)
             }
             
         }
         
+        //Set up Timer
+        //for ever 1 second, update sensor values
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: True) _ in{
+            acc_data ="""
+            Accelerometer (m/s^2)
+            \(sensor_list.accelerometer.name) + ":" + \(String(sensor_list.accelerometer.outs))
+            """
+            
+        }
     }
 }
 
