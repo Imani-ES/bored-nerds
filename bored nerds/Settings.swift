@@ -11,7 +11,7 @@ struct Settings: View {
     @EnvironmentObject var sensor_list: sensors
     
     //Set up vars to hold sensor vals from timer
-    @State acc_data: String = "Loading..."
+    @StateObject acc_data: String = "Loading..."
     
     var body: some View {
         
