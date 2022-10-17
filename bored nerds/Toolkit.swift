@@ -64,7 +64,7 @@ class sensor: ObservableObject  {
             self.out_3.append(data[2])
             
             if out_1.count > 60{
-                self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]   
+                self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
             }
         }
         return "Updated Successfully: \(self.name): \(self.show().description)"
@@ -154,6 +154,7 @@ class sensors: ObservableObject{
     @Published var gyroscope: sensor
     @Published var magnetometer: sensor
     @Published var pressure: sensor
+    @Published var proximity: sensor
     
     let Display: display
     
@@ -171,6 +172,9 @@ class sensors: ObservableObject{
         self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         
         self.pressure = CMAltimeter.isRelativeAltitudeAvailable() ? sensor(name: "Pressure", units: "kpa", type: "move", val_1_name: "pressure", val_2_name: "", val_3_name: "") : dummy
+        
+        self.proximity = sensor(name: "Proximity", units: "Bool", type: "Detect", val_1_name: "isClose", val_2_name: "", val_3_name: "")
+        
         //Begin Sensing
         self.begin_motion_sensing()
     }
@@ -201,8 +205,10 @@ class sensors: ObservableObject{
             print(self.pressure.update(data: [Double(truncating: data!.pressure)]))
             
         }
-        //Two more sensors here
         
+        //Proximity Sensor
+        UIDevice.current.isProximityMonitoringEnabled = true
+            
         print("Now sensing motion")
     }
 }

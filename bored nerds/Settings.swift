@@ -15,10 +15,21 @@ struct Settings: View {
     @State var gyro_data    = "Loading..."
     @State var mag_data     = "Loading..."
     @State var press_data   = "Loading..."
+    @State var proximity    = "Loading..."
+    @State var prox:Bool = false
     var body: some View {
-        //Set up Timer
-        //for ever 1 second, update sensor values
+        
+        //Set up Timer: for ever 1 second, update sensor values
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            //set up proximity updates
+            if UIDevice.current.proximityState {
+                prox = !prox
+                proximity = "Back up !!" //sensor_list.proximity.update(data: [Double(prox_cnt)])
+            }
+            else{
+                proximity = "Welcome"
+            }
+            //other updates
             acc_data =  "\(String(sensor_list.accelerometer.show().description))"
             gyro_data = "\(String(sensor_list.gyroscope.show().description))"
             mag_data =  "\(String(sensor_list.magnetometer.show().description))"
@@ -33,10 +44,9 @@ struct Settings: View {
                 Text(gyro_data)
                 Text(mag_data)
                 Text(press_data)
+                Text(proximity)
             }
-            
-        }
-        
+        }        
     }
     
 }
