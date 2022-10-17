@@ -25,7 +25,7 @@ class sensor: ObservableObject  {
     var out_2: [Double] = [0.0] { didSet {didChange.send()}}
     var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     
-    @Published var outs: [Double] = [0.0,0.0,0.0] { didSet {didChange.send()}}
+    @Published var outs: [Double] = [0.0,0.0,0.0]
     
     init(name:String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
         self.name = name
@@ -54,10 +54,11 @@ class sensor: ObservableObject  {
         self.out_2.append(data[1])            
         self.out_3.append(data[2])
         
-        if out_1.count > 60:
+        if out_1.count > 60{
             self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
-        
-        return "Updated Successfully: \(self.show())"
+            return "Updated Successfully: \(self.name): \(self.show())"
+        }
+        return "$"
     }
     
     func show() -> [Double]{
@@ -135,13 +136,13 @@ class display: ObservableObject {
 let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
 
 //Sensors object used to keep track of all sensors
-@MainActor class sensors: ObservableObject{
+class sensors: ObservableObject{
     var didChange = PassthroughSubject<Void,Never>()
     
     //Set up Motion Manager
     let motionmanager = CMMotionManager()
     let motion_queue = OperationQueue()
-
+    let magnet_queue = OperationQueue()
     
     //Set up sensors
     @Published var Dummy: sensor
@@ -155,12 +156,12 @@ let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: 
         //default sensor
         self.Dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
         
-        //Initialize sensors
-        self.accelerometer = sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll")
+        //Initialize sensors if they are available, else set to dummy
+        self.accelerometer = motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
         
-        self.gyroscope = sensor(name: "Gyroscope", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
+        self.gyroscope = motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
-        self.magnetometer = sensor(name: "Magnetometer", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z")
+        self.magnetometer = motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
         self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         
@@ -170,20 +171,32 @@ let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: 
     
     //Fetch Sensor Data from device
     func begin_motion_sensing(){
+        //check if sensors are running
+        print(self.accelerometer.start(sensor_availability: motionmanager.isAccelerometerActive))
+        print(self.gyroscope.start(sensor_availability: motionmanager.isGyroActive))
+        print(self.magnetometer.start(sensor_availability: motionmanager.isMagnetometerActive))
+        
+        //Accelerometer and gyroscope updates
         self.motionmanager.startDeviceMotionUpdates(to: self.motion_queue){(data: CMDeviceMotion?, error: Error?) in
             let attitude: CMAttitude = data!.attitude
             let gyro: CMRotationRate = data!.rotationRate
-            let mag_field: CMMagneticField = data!.magneticField.field
             
             //Update sensor objects
             print(self.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll]))
             print(self.gyroscope.update(data: [gyro.x,gyro.y,gyro.z]))
+            
+        }
+        
+        //Magnetic Field Updates
+        self.motionmanager.startMagnetometerUpdates(to: self.magnet_queue){(data:CMMagnetometerData?, error:Error?) in
+            let mag_field: CMMagneticField = data!.magneticField
             print(self.magnetometer.update(data: [mag_field.x,mag_field.y,mag_field.z]))
+            
         }
         print("Now sensing motion")
     }
 }
 
 //sensor group object used by app
-//let sensor_list = sensors()
+let sensor_list = sensors()
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct About: View {
-    @EnvironmentObject var sensor_list: sensors
+    //@EnvironmentObject var sensor_list: sensors
     
     var body: some View {
         VStack{

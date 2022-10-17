@@ -21,7 +21,7 @@ enum pages: Identifiable{
 
 
 struct ContentView: View {
-    @EnvironmentObject var sensor_list: sensors
+    //@EnvironmentObject var sensor_list: sensors
     @State private var activepage: pages?
     
     var body: some View {
@@ -42,6 +42,7 @@ struct ContentView: View {
             Text(sensor_list.accelerometer.sensing)
             
         }
+        .environmentObject(sensor_list)
         .sheet(item: $activepage){item in
             switch item{
                 case ._about:
@@ -55,6 +56,7 @@ struct ContentView: View {
             }
             
     }
+
     
     
 }
@@ -62,5 +64,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            //.environmentObject(sensors())
     }
 }
