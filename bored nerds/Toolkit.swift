@@ -64,7 +64,9 @@ class sensor: ObservableObject  {
     }
     
     func show() -> String{
-        return "\(self.name)(\(self.units)): \(["\(self.val_1_name): \(self.outs[0])","\(self.val_2_name): \(self.outs[1])","\(self.val_3_name): \(self.outs[2])"].description)"
+        let nameandunits = "\(self.name)(\(self.units)):"
+        let data = "\(["\(self.val_1_name): \(self.outs[0])","\(self.val_2_name): \(self.outs[1])","\(self.val_3_name): \(self.outs[2])"].description)"
+        return "\(nameandunits) \(data)"
     }
     
     //Maybe have different class for movement sensors in future.
