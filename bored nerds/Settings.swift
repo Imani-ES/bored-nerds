@@ -18,9 +18,9 @@ struct Settings: View {
         //Set up Timer
         //for ever 1 second, update sensor values
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            acc_data =  "\(String(sensor_list.accelerometer.name)) (m/s^2) \(sensor_list.accelerometer.outs.description)"
-            gyro_data = " \(String(sensor_list.gyroscope.name)) (m/s^2) \(sensor_list.gyroscope.outs.description)"
-            mag_data =  " \(String(sensor_list.magnetometer.name)) (m/s^2) \(sensor_list.magnetometer.outs.description)"
+            acc_data =  "\(String(sensor_list.accelerometer.show().description))"
+            gyro_data = " \(String(sensor_list.gyroscope.show().description))"
+            mag_data =  " \(String(sensor_list.magnetometer.show().description))"
         }
         VStack{
             Text("Sensor Settings")

@@ -15,6 +15,7 @@ class sensor: ObservableObject  {
     var didChange = PassthroughSubject<Void,Never>()
     
     let name :String
+    let units:String
     let type :String
     let val_1_name: String
     let val_2_name: String
@@ -27,8 +28,9 @@ class sensor: ObservableObject  {
     
     @Published var outs: [Double] = [0.0,0.0,0.0]
     
-    init(name:String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
+    init(name:String, units: String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
         self.name = name
+        self.units = units
         self.type = type
         self.val_1_name = val_1_name
         self.val_2_name = val_2_name
@@ -56,20 +58,18 @@ class sensor: ObservableObject  {
         
         if out_1.count > 60{
             self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
-            return "Updated Successfully: \(self.name): \(self.show())"
+            return "Updated Successfully: \(self.name): \(self.show().description)"
         }
         return "$"
     }
     
-    func show() -> [Double]{
-        return self.outs
+    func show() -> String{
+        return "\(self.name)(\(self.units)): \(["\(self.val_1_name): \(self.outs[0])","\(self.val_2_name): \(self.outs[1])","\(self.val_3_name): \(self.outs[2])"].description)"
     }
     
     //Maybe have different class for movement sensors in future.
     //class movement_sensor: sensor { }
 }
-
-
 
 //display object used to keep track of user selected sensors
 class display: ObservableObject {
@@ -91,11 +91,11 @@ class display: ObservableObject {
     // Takes in sensor, attempts to add sensor to display.
     // If display is full, return false error message, else return good.
     func add_sensor(sensor:sensor) -> Int{
-        if self.sensor_1.name == "Dummy"{
+        if self.sensor_1.name == "Comming Soon"{
             self.sensor_1 = sensor
             return 0
         }
-        else if self.sensor_2.name == "Dummy"{
+        else if self.sensor_2.name == "Comming Soon"{
             self.sensor_2 = sensor
             return 0
         }
@@ -117,23 +117,16 @@ class display: ObservableObject {
     }
     
     //Output of display goes straight into graph in "Playground" sheet
-    func show() -> [Double]{
-        let s_1: [Double] = self.sensor_1.show()
-        let s_2: [Double] = self.sensor_2.show()
-        if operation == 0{
-            return [s_1[0],s_1[1],s_1[2]]
-        }
-        
-        else if operation == 1{
-            return [s_1[0] + s_2[0],s_1[1] + s_2[1],s_1[2] + s_2[2]]
-        }
-        return [0.0]
+    func show() -> String{
+        let s_1: String = self.sensor_1.show()
+        //let s_2: [String] = self.sensor_2.show()
+        return s_1
     }
     
 }
 
 //default sensor
-let dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
+let dummy = sensor(name: "Comming Soon", units: "", type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
 
 //Sensors object used to keep track of all sensors
 class sensors: ObservableObject{
@@ -154,14 +147,14 @@ class sensors: ObservableObject{
     
     init(){
         //default sensor
-        self.Dummy = sensor(name: "Dummy", type: "Dumb", val_1_name: "Dumb", val_2_name: "Dumb", val_3_name: "Dumb")
+        self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
         
         //Initialize sensors if they are available, else set to dummy
-        self.accelerometer = motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
+        self.accelerometer = motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/s^2", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
         
-        self.gyroscope = motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.gyroscope = motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
-        self.magnetometer = motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.magnetometer = motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
         self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         
@@ -171,10 +164,6 @@ class sensors: ObservableObject{
     
     //Fetch Sensor Data from device
     func begin_motion_sensing(){
-        //check if sensors are running
-        print(self.accelerometer.start(sensor_availability: motionmanager.isAccelerometerActive))
-        print(self.gyroscope.start(sensor_availability: motionmanager.isGyroActive))
-        print(self.magnetometer.start(sensor_availability: motionmanager.isMagnetometerActive))
         
         //Accelerometer and gyroscope updates
         self.motionmanager.startDeviceMotionUpdates(to: self.motion_queue){(data: CMDeviceMotion?, error: Error?) in
@@ -193,6 +182,9 @@ class sensors: ObservableObject{
             print(self.magnetometer.update(data: [mag_field.x,mag_field.y,mag_field.z]))
             
         }
+        
+        //Two more sensors here
+        
         print("Now sensing motion")
     }
 }
