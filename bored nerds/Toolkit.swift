@@ -50,17 +50,24 @@ class sensor: ObservableObject  {
     }
     
     func update(data:[Double]) -> String {
-        self.outs = [data[0],data[1],data[2]]
-        
-        self.out_1.append(data[0])        
-        self.out_2.append(data[1])            
-        self.out_3.append(data[2])
-        
-        if out_1.count > 60{
-            self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
-            return "Updated Successfully: \(self.name): \(self.show().description)"
+        if data.count <= 1{
+            self.outs = [data[0],0.0,0.0]
+            if out_1.count > 60{
+                self.outs = [out_1.removeFirst(),0.0,0.0]
+            }
         }
-        return "$"
+        else{
+            self.outs = [data[0],data[1],data[2]]
+            
+            self.out_1.append(data[0])
+            self.out_2.append(data[1])
+            self.out_3.append(data[2])
+            
+            if out_1.count > 60{
+                self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]   
+            }
+        }
+        return "Updated Successfully: \(self.name): \(self.show().description)"
     }
     
     func show() -> String{
@@ -136,14 +143,17 @@ class sensors: ObservableObject{
     
     //Set up Motion Manager
     let motionmanager = CMMotionManager()
+    let altimeter = CMAltimeter()
     let motion_queue = OperationQueue()
     let magnet_queue = OperationQueue()
+    let pressure_queues = OperationQueue()
     
     //Set up sensors
     @Published var Dummy: sensor
     @Published var accelerometer: sensor
     @Published var gyroscope: sensor
     @Published var magnetometer: sensor
+    @Published var pressure: sensor
     
     let Display: display
     
@@ -152,14 +162,15 @@ class sensors: ObservableObject{
         self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
         
         //Initialize sensors if they are available, else set to dummy
-        self.accelerometer = motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/s^2", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
+        self.accelerometer = self.motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/s^2", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
         
-        self.gyroscope = motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
-        self.magnetometer = motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
         self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         
+        self.pressure = CMAltimeter.isRelativeAltitudeAvailable() ? sensor(name: "Pressure", units: "kpa", type: "move", val_1_name: "pressure", val_2_name: "", val_3_name: "") : dummy
         //Begin Sensing
         self.begin_motion_sensing()
     }
@@ -185,6 +196,11 @@ class sensors: ObservableObject{
             
         }
         
+        //Pressure updates
+        self.altimeter.startRelativeAltitudeUpdates(to:pressure_queues){(data:CMAltitudeData?, error:Error?) in
+            print(self.pressure.update(data: [Double(truncating: data!.pressure)]))
+            
+        }
         //Two more sensors here
         
         print("Now sensing motion")
