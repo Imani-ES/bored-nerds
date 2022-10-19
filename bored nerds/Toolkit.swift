@@ -75,10 +75,11 @@ class sensor: ObservableObject  {
         }
         //return "Updated Successfully: \(self.name): \(self.show().description)"
     }
-    
-    func show() -> [String]{
+    func show_title() -> String{
+        return "\(self.name)(\(self.units)"
+    }
+    func show_data() -> [String]{
         var ret : [String] = []
-        ret.append("\(self.name)(\(self.units)):")
         ret.append(self.val_1_name == "" ? "" : "\(self.val_1_name): \(round(self.outs[0]*1000)/1000)")
         ret.append(self.val_2_name == "" ? "" : "\(self.val_2_name): \(round(self.outs[1]*1000)/1000)")
         ret.append(self.val_3_name == "" ? "" : "\(self.val_3_name): \(round(self.outs[2]*1000)/1000)")

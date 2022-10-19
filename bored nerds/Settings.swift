@@ -10,10 +10,11 @@ import SwiftUI
 struct Settings: View {
     
     //Set up vars to hold sensor vals from timer
-    @State var acc_data     = "Loading..."
-    @State var gyro_data    = "Loading..."
-    @State var mag_data     = "Loading..."
-    @State var press_data   = "Loading..."
+    @State var acc_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
+    @State var gyro_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
+    @State var press_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
+    @State var mag_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
+   
     @State var proximity    = "Loading..."
     @State var prox:Bool = false
     
@@ -31,33 +32,22 @@ struct Settings: View {
                 proximity = "Welcome"
             }
             //other updates
-            acc_data =  "\(String(sensor_list.accelerometer.show().description))"
-            gyro_data = "\(String(sensor_list.gyroscope.show().description))"
-            mag_data =  "\(String(sensor_list.magnetometer.show().description))"
-            press_data = "\(String(sensor_list.pressure.show().description))"
+            acc_data =  _sensor_view(sensor_data: sensor_list.accelerometer.show_data(), sensor_title: sensor_list.accelerometer.show_title())
+            gyro_data =  _sensor_view(sensor_data: sensor_list.gyroscope.show_data(), sensor_title: sensor_list.gyroscope.show_title())
+            mag_data =  _sensor_view(sensor_data: sensor_list.magnetometer.show_data(), sensor_title: sensor_list.magnetometer.show_title())
+            press_data =  _sensor_view(sensor_data: sensor_list.pressure.show_data(), sensor_title: sensor_list.pressure.show_title())
+            
         }
         VStack{
             title(data: "Sensor Settings")
             ScrollView( content:{
                 //Each sensor here
                 VStack{
-                    
-                    HStack{
-                        
-                    }.onTapGesture{
-                        self.acc_view.toggle()
-                    }.background(Color.red).cornerRadius(20)
-                    
-                    Text(acc_data)
-                }.frame(height: acc_view ? 400 : 50)
-                
-                VStack{
-                    Group {
-                        Text(gyro_data)
-                        Text(mag_data)
-                        Text(press_data)
-                        Text(proximity)
-                    }
+                    acc_data
+                    gyro_data
+                    mag_data
+                    press_data
+                    Text(proximity)
                 }
             })
         }
@@ -65,24 +55,27 @@ struct Settings: View {
     
 }
 struct _sensor_view: View{
-    var sensor_name: String
-    var sensor_data: String
+    let sensor_data: [String]
+    let sensor_title: String
     var body: some View{
-        title(data: "About the Author")
-        sub_title(data: "Imani Muhammad-Graham")
         HStack{
-            sub_title(data: "Accelerometer")
+            Menu {
+                ForEach(0..<3){ i in
+                    if i < sensor_data.count{
+                        regular(data: sensor_data[i])
+                    }
+                }
+            } label: {
+                sub_title(data: sensor_title)
+            }
+            
             Image("accelerometer_img")
                 .resizable()
                 .frame(width: 50, height: 50)
                 .cornerRadius(20)
                 .padding()
         }
-        VStack{
-            
-        }
-        sub_title(data: "Connect")
-        
+    
     }
 }
 
