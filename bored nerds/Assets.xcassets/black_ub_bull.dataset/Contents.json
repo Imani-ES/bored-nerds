@@ -2,7 +2,8 @@
   "data" : [
     {
       "filename" : "Bull_Spiritmark_Small_K.eps",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "universal-type-identifier" : "com.adobe.encapsulated-postscript"
     }
   ],
   "info" : {

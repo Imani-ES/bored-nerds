@@ -163,11 +163,11 @@ class sensors: ObservableObject{
         self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
         
         //Initialize sensors if they are available, else set to dummy
-        self.accelerometer = self.motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/s^2", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
+        self.accelerometer = self.motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/(s^2)", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
         
-        self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"rad/s", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
-        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"?", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"(10^-6)Tesla", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
         self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         

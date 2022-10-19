@@ -12,14 +12,50 @@ struct About: View {
     
     var body: some View {
         VStack{
+            _about_section(data: "")
+                .padding()
+            
+            _purpose(data: "")
+                .padding()
+            
+            _about_the_author(data: "")
+                .padding()
+            
+            _sources_section(data: "")
+                .padding()
+            
+        }
+    }
+}
+
+// Page sections
+struct _purpose: View{
+    var data: String
+    var body: some View{
+        VStack{
+            title(data: "Project Purpose")
+        }
+    }
+}
+
+struct _about_section: View{
+    var data: String
+    var body: some View{
+        VStack{
             title(data: "About")
             Group{
                 regular(data: "Bored Nerds is an app focused on educating bored nividuals about sensors on their phone...")
             }
-            
-            title(data: "Project Purpose")
-            
+        }
+    }
+}
+
+struct _about_the_author: View{
+    var data: String
+    var body: some View{
+        VStack{
             title(data: "About the Author")
+                .padding()
             Group{
                 sub_title(data: "Imani Muhammad-Graham")
                 
@@ -27,16 +63,22 @@ struct About: View {
                     .resizable()
                     .cornerRadius(20)
                     .scaledToFit()
+                    
                 regular(data: "")
                 
-                Image("black_ub_bull")
+                Image("ub_logo")
                     .resizable()
                     .cornerRadius(20)
                     .scaledToFit()
-                
-                
             }
-            
+        }
+    }
+}
+
+struct _sources_section : View{
+    var data: String
+    var body: some View{
+        VStack{
             title(data: "Sources")
             Group{
                 sub_title(data: "Apple Developer")
@@ -49,12 +91,11 @@ struct About: View {
                 regular(data: "Used as a reference for learning Swift Views")
                 little(data: "https://www.youtube.com/watch?v=uC3X4FoielU")
             }
-            
         }
-        Text(sensor_list.accelerometer.sensing)
     }
 }
 
+// Text Types
 struct title: View{
     var data: String
     var body: some View{
@@ -65,7 +106,6 @@ struct title: View{
         }
     }
 }
-
 struct sub_title: View{
     var data: String
     var body: some View{
@@ -77,7 +117,6 @@ struct sub_title: View{
         }
     }
 }
-
 struct regular:View{
     var data: String
     var body: some View{
@@ -88,7 +127,6 @@ struct regular:View{
         }
     }
 }
-
 struct little: View{
     var data: String
     var body: some View{
@@ -99,6 +137,7 @@ struct little: View{
         }
     }
 }
+
 struct About_Previews: PreviewProvider {
     static var previews: some View {
         About()
