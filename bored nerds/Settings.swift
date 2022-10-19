@@ -43,12 +43,7 @@ struct Settings: View {
                 VStack{
                     
                     HStack{
-                        sub_title(data: "Accelerometer")
-                        Image("accelerometer_img")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(20)
-                            .padding()
+                        
                     }.onTapGesture{
                         self.acc_view.toggle()
                     }.background(Color.red).cornerRadius(20)
@@ -69,6 +64,28 @@ struct Settings: View {
     }
     
 }
+struct _sensor_view: View{
+    var sensor_name: String
+    var sensor_data: String
+    var body: some View{
+        title(data: "About the Author")
+        sub_title(data: "Imani Muhammad-Graham")
+        HStack{
+            sub_title(data: "Accelerometer")
+            Image("accelerometer_img")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .cornerRadius(20)
+                .padding()
+        }
+        VStack{
+            
+        }
+        sub_title(data: "Connect")
+        
+    }
+}
+
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
