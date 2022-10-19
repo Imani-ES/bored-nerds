@@ -22,10 +22,9 @@ class sensor: ObservableObject  {
     let val_3_name: String
     var sensing: String = "False"{ didSet {didChange.send()}}
     
-    var out_1: [Double] = [0.0] { didSet {didChange.send()}}
-    var out_2: [Double] = [0.0] { didSet {didChange.send()}}
-    var out_3: [Double] = [0.0] { didSet {didChange.send()}}
-    
+    @Published var out_1: [Double] = [0.0] { didSet {didChange.send()}}
+    @Published var out_2: [Double] = [0.0] { didSet {didChange.send()}}
+    @Published var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     @Published var outs: [Double] = [0.0,0.0,0.0]
     
     init(name:String, units: String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
@@ -49,11 +48,11 @@ class sensor: ObservableObject  {
         return self.sensing
     }
     
-    func update(data:[Double]) -> String {
+    func update(data:[Double]) {
         if data.count <= 1{
             self.outs = [data[0],0.0,0.0]
             if out_1.count > 60{
-                self.outs = [out_1.removeFirst(),0.0,0.0]
+                out_1.removeFirst()
             }
         }
         else{
@@ -64,10 +63,17 @@ class sensor: ObservableObject  {
             self.out_3.append(data[2])
             
             if out_1.count > 60{
-                self.outs = [out_1.removeFirst(),out_2.removeFirst(), out_3.removeFirst()]
+                out_1.removeFirst()
+            }
+            
+            if out_2.count > 60{
+                out_2.removeFirst()
+            }
+            if out_3.count > 60{
+                out_3.removeFirst()
             }
         }
-        return "Updated Successfully: \(self.name): \(self.show().description)"
+        //return "Updated Successfully: \(self.name): \(self.show().description)"
     }
     
     func show() -> String{
@@ -147,6 +153,7 @@ class sensors: ObservableObject{
     let motion_queue = OperationQueue()
     let magnet_queue = OperationQueue()
     let pressure_queues = OperationQueue()
+    let update_interval: Double
     
     //Set up sensors
     @Published var Dummy: sensor
@@ -158,7 +165,10 @@ class sensors: ObservableObject{
     
     let Display: display
     
-    init(){
+    init(update_interval: Double){
+        
+        self.update_interval = update_interval
+        
         //default sensor
         self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
         
@@ -181,6 +191,8 @@ class sensors: ObservableObject{
     
     //Fetch Sensor Data from device
     func begin_motion_sensing(){
+        //set update intervals
+        self.motionmanager.deviceMotionUpdateInterval = self.update_interval
         
         //Accelerometer and gyroscope updates
         self.motionmanager.startDeviceMotionUpdates(to: self.motion_queue){(data: CMDeviceMotion?, error: Error?) in
@@ -188,21 +200,21 @@ class sensors: ObservableObject{
             let gyro: CMRotationRate = data!.rotationRate
             
             //Update sensor objects
-            print(self.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll]))
-            print(self.gyroscope.update(data: [gyro.x,gyro.y,gyro.z]))
+            self.accelerometer.update(data: [attitude.pitch,attitude.yaw,attitude.roll])
+            self.gyroscope.update(data: [gyro.x,gyro.y,gyro.z])
             
         }
         
         //Magnetic Field Updates
         self.motionmanager.startMagnetometerUpdates(to: self.magnet_queue){(data:CMMagnetometerData?, error:Error?) in
             let mag_field: CMMagneticField = data!.magneticField
-            print(self.magnetometer.update(data: [mag_field.x,mag_field.y,mag_field.z]))
+            self.magnetometer.update(data: [mag_field.x,mag_field.y,mag_field.z])
             
         }
         
         //Pressure updates
         self.altimeter.startRelativeAltitudeUpdates(to:pressure_queues){(data:CMAltitudeData?, error:Error?) in
-            print(self.pressure.update(data: [Double(truncating: data!.pressure)]))
+            self.pressure.update(data: [Double(truncating: data!.pressure)])
             
         }
         
@@ -214,5 +226,5 @@ class sensors: ObservableObject{
 }
 
 //sensor group object used by app
-let sensor_list = sensors()
+let sensor_list = sensors(update_interval: 0.1)
 

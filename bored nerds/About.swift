@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct About: View {
-    //@EnvironmentObject var sensor_list: sensors
     
     var body: some View {
         ScrollView(content: {
@@ -18,11 +17,11 @@ struct About: View {
                 
                 _purpose(data: "")
                     .padding(.vertical)
-                
-                _about_the_author(data: "")
+                                        
+                _sources_section(data: "")
                     .padding(.vertical)
                 
-                _sources_section(data: "")
+                _about_the_author(data: "")
                     .padding(.vertical)
             }
             
@@ -112,6 +111,7 @@ struct title: View{
         }
     }
 }
+
 struct sub_title: View{
     var data: String
     var body: some View{
@@ -123,6 +123,7 @@ struct sub_title: View{
         }
     }
 }
+
 struct regular:View{
     var data: String
     var body: some View{
@@ -134,6 +135,7 @@ struct regular:View{
         }
     }
 }
+
 struct little: View{
     var data: String
     var body: some View{

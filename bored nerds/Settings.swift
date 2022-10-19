@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Settings: View {
-   // @EnvironmentObject var sensor_list: sensors
     
     //Set up vars to hold sensor vals from timer
     @State var acc_data     = "Loading..."
@@ -17,6 +16,7 @@ struct Settings: View {
     @State var press_data   = "Loading..."
     @State var proximity    = "Loading..."
     @State var prox:Bool = false
+    
     var body: some View {
         
         //Set up Timer: for ever 1 second, update sensor values
@@ -35,6 +35,7 @@ struct Settings: View {
             mag_data =  "\(String(sensor_list.magnetometer.show().description))"
             press_data = "\(String(sensor_list.pressure.show().description))"
         }
+        
         VStack{
             Text("Sensor Settings")
                 .padding()

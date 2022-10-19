@@ -6,26 +6,27 @@
 //
 
 import SwiftUI
-//maybe chartview: https://github.com/AppPear/ChartView.git
+import SwiftUICharts
 
 struct Playground: View {
-    //@EnvironmentObject var sensor_list: sensors
-    
+    @State var chart_data = [([0.0],GradientColors.blue)]
     var body: some View {
+        let _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            chart_data = [(sensor_list.accelerometer.out_1,GradientColors.blue)]
+        }
         VStack{
             Text("Playground")
+            MultiLineChartView(
+                data: chart_data,
+                title: "Accelerometer x",
+                form: ChartForm.extraLarge,
+                dropShadow: false
+            )
         }
-        Text(sensor_list.accelerometer.sensing)
-        .onAppear{
-            //get motion manager going
-            //self.motionManager.startDeviceMotionUpdates(to: self.queue){ (data: CMDeviceMotion?, error: Error?) in
-                //set up each
-                
-                
-            }
+        
     }
     
-    }
+}
     
 
 struct Playground_Previews: PreviewProvider {
