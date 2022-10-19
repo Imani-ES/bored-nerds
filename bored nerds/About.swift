@@ -11,20 +11,22 @@ struct About: View {
     //@EnvironmentObject var sensor_list: sensors
     
     var body: some View {
-        VStack{
-            _about_section(data: "")
-                .padding()
+        ScrollView(content: {
+            VStack{
+                _about_section(data: "")
+                    .padding(.vertical)
+                
+                _purpose(data: "")
+                    .padding(.vertical)
+                
+                _about_the_author(data: "")
+                    .padding(.vertical)
+                
+                _sources_section(data: "")
+                    .padding(.vertical)
+            }
             
-            _purpose(data: "")
-                .padding()
-            
-            _about_the_author(data: "")
-                .padding()
-            
-            _sources_section(data: "")
-                .padding()
-            
-        }
+        })
     }
 }
 
@@ -34,6 +36,7 @@ struct _purpose: View{
     var body: some View{
         VStack{
             title(data: "Project Purpose")
+            regular(data: "Bored Nerds is an app focused on educating bored individuals about sensors on their phone...")
         }
     }
 }
@@ -43,9 +46,7 @@ struct _about_section: View{
     var body: some View{
         VStack{
             title(data: "About")
-            Group{
-                regular(data: "Bored Nerds is an app focused on educating bored nividuals about sensors on their phone...")
-            }
+            regular(data: "An intro to the app...")
         }
     }
 }
@@ -53,45 +54,49 @@ struct _about_section: View{
 struct _about_the_author: View{
     var data: String
     var body: some View{
-        VStack{
-            title(data: "About the Author")
+        title(data: "About the Author")
+        sub_title(data: "Imani Muhammad-Graham")
+        HStack{
+            Image("imani_pic")
+                .resizable()
+                .cornerRadius(20)
+                .scaledToFit()
                 .padding()
-            Group{
-                sub_title(data: "Imani Muhammad-Graham")
-                
-                Image("imani_pic")
-                    .resizable()
-                    .cornerRadius(20)
-                    .scaledToFit()
-                    
-                regular(data: "")
-                
-                Image("ub_logo")
-                    .resizable()
-                    .cornerRadius(20)
-                    .scaledToFit()
-            }
+            
+            Image("ub_bull")
+                .resizable()
+                .frame(width: 75.0,height: 75.0)
+                .cornerRadius(20)
+                .scaledToFit()
+                .padding()
         }
+        sub_title(data: "Connect")
+        
     }
 }
 
 struct _sources_section : View{
     var data: String
     var body: some View{
-        VStack{
-            title(data: "Sources")
-            Group{
-                sub_title(data: "Apple Developer")
-                regular(data: "Documentation for Device motion sensors accelerometer, gyroscope, magnetometer, and barometer")
-                little(data: "https://developer.apple.com/documentation/coremotion/cmmotionmanager")
-                regular(data: "Used for reference as to how to fetch, update, and display data")
-                little(data: "https://www.youtube.com/watch?v=ARLy0rvyKz0")
-                regular(data: "Used as a reference for learning Swift for backend processes")
-                little(data: "https://www.youtube.com/watch?v=stSB04C4iS4")
-                regular(data: "Used as a reference for learning Swift Views")
-                little(data: "https://www.youtube.com/watch?v=uC3X4FoielU")
+        title(data: "Sources")
+        ScrollView(.vertical, showsIndicators: true, content:{
+            VStack{
+                Group{
+                    sub_title(data: "Apple Developer")
+                    regular(data: "Documentation for Device motion sensors accelerometer, gyroscope, magnetometer, and barometer")
+                    little(data: "https://developer.apple.com/documentation/coremotion/cmmotionmanager")
+                    
+                    sub_title(data: "Youtube/ Tutorials")
+                    regular(data: "Used for reference as to how to fetch, update, and display data")
+                    little(data: "https://www.youtube.com/watch?v=ARLy0rvyKz0")
+                    regular(data: "Used as a reference for learning Swift for backend processes")
+                    little(data: "https://www.youtube.com/watch?v=stSB04C4iS4")
+                    regular(data: "Used as a reference for learning Swift Views")
+                    little(data: "https://www.youtube.com/watch?v=uC3X4FoielU")
+                }
             }
-        }
+        })
+        
     }
 }
 
@@ -103,6 +108,7 @@ struct title: View{
             Text(data)
                 .font(.title)
                 .multilineTextAlignment(.center)
+                .padding()
         }
     }
 }
@@ -111,7 +117,7 @@ struct sub_title: View{
     var body: some View{
         VStack{
             Text(data)
-                .font(.caption)
+                .font(.title2)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.gray)
         }
@@ -124,6 +130,7 @@ struct regular:View{
             Text(data)
                 .font(.body)
                 .multilineTextAlignment(.leading)
+                .padding()
         }
     }
 }
@@ -132,7 +139,7 @@ struct little: View{
     var body: some View{
         VStack{
             Text(data)
-                .font(.footnote)
+                .font(.caption2)
                 .multilineTextAlignment(.leading)
         }
     }
