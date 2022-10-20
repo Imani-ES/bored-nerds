@@ -10,10 +10,10 @@ import SwiftUI
 struct Settings: View {
     
     //Set up vars to hold sensor vals from timer
-    @State var acc_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
-    @State var gyro_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
-    @State var press_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
-    @State var mag_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon")
+    @State var acc_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon", img: "Loading")
+    @State var gyro_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon", img: "Loading")
+    @State var press_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon", img: "Loading")
+    @State var mag_data: _sensor_view = _sensor_view(sensor_data: ["Loading..."], sensor_title: "Comming Soon", img: "Loading")
    
     @State var proximity    = "Loading..."
     @State var prox:Bool = false
@@ -32,10 +32,10 @@ struct Settings: View {
                 proximity = "Welcome"
             }
             //other updates
-            acc_data =  _sensor_view(sensor_data: sensor_list.accelerometer.show_data(), sensor_title: sensor_list.accelerometer.show_title())
-            gyro_data =  _sensor_view(sensor_data: sensor_list.gyroscope.show_data(), sensor_title: sensor_list.gyroscope.show_title())
-            mag_data =  _sensor_view(sensor_data: sensor_list.magnetometer.show_data(), sensor_title: sensor_list.magnetometer.show_title())
-            press_data =  _sensor_view(sensor_data: sensor_list.pressure.show_data(), sensor_title: sensor_list.pressure.show_title())
+            acc_data =  _sensor_view(sensor_data: sensor_list.accelerometer.show_data(), sensor_title: sensor_list.accelerometer.show_title(), img: "accelerometer_img")
+            gyro_data =  _sensor_view(sensor_data: sensor_list.gyroscope.show_data(), sensor_title: sensor_list.gyroscope.show_title(), img: "Gyro")
+            mag_data =  _sensor_view(sensor_data: sensor_list.magnetometer.show_data(), sensor_title: sensor_list.magnetometer.show_title(), img:"Magnet")
+            press_data =  _sensor_view(sensor_data: sensor_list.pressure.show_data(), sensor_title: sensor_list.pressure.show_title(), img: "Pressure")
             
         }
         VStack{
@@ -44,9 +44,13 @@ struct Settings: View {
                 //Each sensor here
                 VStack{
                     acc_data
+                    Divider()
                     gyro_data
+                    Divider()
                     mag_data
+                    Divider()
                     press_data
+                    Divider()
                     Text(proximity)
                 }
             })
@@ -57,6 +61,7 @@ struct Settings: View {
 struct _sensor_view: View{
     let sensor_data: [String]
     let sensor_title: String
+    let img: String
     var body: some View{
         HStack{
             Menu {
@@ -69,7 +74,7 @@ struct _sensor_view: View{
                 sub_title(data: sensor_title)
             }
             
-            Image("accelerometer_img")
+            Image(self.img)
                 .resizable()
                 .frame(width: 50, height: 50)
                 .cornerRadius(20)

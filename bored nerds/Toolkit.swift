@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 import CoreMotion
-
+import SwiftUICharts
 //Sensor object that all sensors will be created from
 class sensor: ObservableObject  {
     var didChange = PassthroughSubject<Void,Never>()
@@ -76,7 +76,7 @@ class sensor: ObservableObject  {
         //return "Updated Successfully: \(self.name): \(self.show().description)"
     }
     func show_title() -> String{
-        return "\(self.name)(\(self.units)"
+        return "\(self.name)(\(self.units))"
     }
     func show_data() -> [String]{
         var ret : [String] = []
@@ -86,6 +86,9 @@ class sensor: ObservableObject  {
         return ret
     }
     
+    func display() -> chart_stuff {
+        return chart_stuff(chart_data: [(self.out_1,GradientColors.blue),(self.out_2,GradientColors.orngPink),(self.out_3,GradientColors.green)], title: self.name)
+    }
     //Maybe have different class for movement sensors in future.
     //class movement_sensor: sensor { }
 }
@@ -181,7 +184,7 @@ class sensors: ObservableObject{
         
         self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"rad/s", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
-        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"(10^-6)Tesla", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"(10^-6)T", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
         
 //        self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
         

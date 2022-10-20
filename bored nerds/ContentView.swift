@@ -26,20 +26,25 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-            Text("Hello, world!")
-                .padding()
+            Image("Bored_Nerds")
+                .resizable()
+                .scaledToFit()
+                .padding(10)
+                .cornerRadius(50)
+                .frame(width: 300,height: 300)
+            HStack{
+                Button("About"){
+                    activepage = ._about
+                }
+                Button("My Sensors"){
+                    activepage = ._settings
+                }.padding()
+                Button("Playground"){
+                    activepage = ._playground
+                }
+            }
             
-            Button("About Page"){
-                activepage = ._about
-            }
-            Button("Settings"){
-                activepage = ._settings
-            }
-            Button("Playground"){
-                activepage = ._playground
-            }
             
-            Text(sensor_list.accelerometer.sensing)
             
         }
         .environmentObject(sensor_list)

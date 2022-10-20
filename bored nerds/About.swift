@@ -13,16 +13,15 @@ struct About: View {
         ScrollView(content: {
             VStack{
                 _about_section(data: "")
-                    .padding(.vertical)
                 
+                Divider()
                 _purpose(data: "")
-                    .padding(.vertical)
-                                        
-                _sources_section(data: "")
-                    .padding(.vertical)
                 
+                Divider()
+                _sources_section(data: "")
+                
+                Divider()
                 _about_the_author(data: "")
-                    .padding(.vertical)
             }
             
         })
@@ -34,8 +33,8 @@ struct _purpose: View{
     var data: String
     var body: some View{
         VStack{
-            title(data: "Project Purpose")
-            regular(data: "Bored Nerds is an app focused on educating bored individuals about sensors on their phone...")
+            sub_title(data: "Project Purpose")
+            little(data: "Bored Nerds is an app focused on educating bored individuals about sensors on their phone...")
         }
     }
 }
@@ -45,7 +44,6 @@ struct _about_section: View{
     var body: some View{
         VStack{
             title(data: "About")
-            regular(data: "An intro to the app...")
         }
     }
 }
@@ -53,8 +51,8 @@ struct _about_section: View{
 struct _about_the_author: View{
     var data: String
     var body: some View{
-        title(data: "About the Author")
-        sub_title(data: "Imani Muhammad-Graham")
+        sub_title(data: "About the Author")
+        regular(data: "Imani Muhammad-Graham")
         HStack{
             Image("imani_pic")
                 .resizable()
@@ -69,7 +67,9 @@ struct _about_the_author: View{
                 .scaledToFit()
                 .padding()
         }
+        Divider()
         sub_title(data: "Connect")
+        Link("Linkedin", destination: URL(string:"https://www.linkedin.com/in/imani-muhammad-graham-424b4a127")!)
         
     }
 }
@@ -77,22 +77,18 @@ struct _about_the_author: View{
 struct _sources_section : View{
     var data: String
     var body: some View{
-        title(data: "Sources")
+        sub_title(data: "Sources")
         ScrollView(.vertical, showsIndicators: true, content:{
             VStack{
-                Group{
-                    sub_title(data: "Apple Developer")
-                    regular(data: "Documentation for Device motion sensors accelerometer, gyroscope, magnetometer, and barometer")
-                    little(data: "https://developer.apple.com/documentation/coremotion/cmmotionmanager")
-                    
-                    sub_title(data: "Youtube/ Tutorials")
-                    regular(data: "Used for reference as to how to fetch, update, and display data")
-                    little(data: "https://www.youtube.com/watch?v=ARLy0rvyKz0")
-                    regular(data: "Used as a reference for learning Swift for backend processes")
-                    little(data: "https://www.youtube.com/watch?v=stSB04C4iS4")
-                    regular(data: "Used as a reference for learning Swift Views")
-                    little(data: "https://www.youtube.com/watch?v=uC3X4FoielU")
-                }
+                regular(data: "Apple Developer")
+                Link("Device Motion Sensors", destination: URL (string:  "https://developer.apple.com/documentation/coremotion/cmmotionmanager")!)
+                
+                regular(data: "Youtube/ Tutorials")
+                Link("Swift Programming", destination: URL(string: "https://www.youtube.com/watch?v=stSB04C4iS4")!)
+                Link("Swift Views", destination: URL (string:"https://www.youtube.com/watch?v=uC3X4FoielU")!)
+                Link("SwiftUI Charts", destination: URL(string: "https://www.youtube.com/watch?v=ARLy0rvyKz0")!)
+                
+                
             }
         })
         
@@ -120,6 +116,7 @@ struct sub_title: View{
                 .font(.title2)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.gray)
+                .padding()
         }
     }
 }
