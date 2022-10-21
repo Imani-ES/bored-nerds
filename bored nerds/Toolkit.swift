@@ -10,12 +10,14 @@ import Combine
 import SwiftUI
 import CoreMotion
 import SwiftUICharts
+
 //Sensor object that all sensors will be created from
 class sensor: ObservableObject  {
     var didChange = PassthroughSubject<Void,Never>()
     
     let name :String
     let units:String
+    let img: String
     let type :String
     let val_1_name: String
     let val_2_name: String
@@ -27,13 +29,14 @@ class sensor: ObservableObject  {
     @Published var out_3: [Double] = [0.0] { didSet {didChange.send()}}
     @Published var outs: [Double] = [0.0,0.0,0.0]
     
-    init(name:String, units: String, type:String, val_1_name:String,val_2_name:String,val_3_name:String){
+    init(name:String, units: String, type:String, val_1_name:String,val_2_name:String,val_3_name:String, img:String){
         self.name = name
         self.units = units
         self.type = type
         self.val_1_name = val_1_name
         self.val_2_name = val_2_name
         self.val_3_name = val_3_name
+        self.img = img
         print("Initialized " + name)
     }
     
@@ -73,11 +76,13 @@ class sensor: ObservableObject  {
                 out_3.removeFirst()
             }
         }
-        //return "Updated Successfully: \(self.name): \(self.show().description)"
+
     }
+  
     func show_title() -> String{
         return "\(self.name)(\(self.units))"
     }
+  
     func show_data() -> [String]{
         var ret : [String] = []
         ret.append(self.val_1_name == "" ? "" : "\(self.val_1_name): \(round(self.outs[0]*1000)/1000)")
@@ -89,66 +94,11 @@ class sensor: ObservableObject  {
     func display() -> chart_stuff {
         return chart_stuff(chart_data: [(self.out_1,GradientColors.blue),(self.out_2,GradientColors.orngPink),(self.out_3,GradientColors.green)], title: self.name)
     }
-    //Maybe have different class for movement sensors in future.
-    //class movement_sensor: sensor { }
+    
 }
 
-//display object used to keep track of user selected sensors
-//class display: ObservableObject {
-//    var didChange = PassthroughSubject<Void,Never>()
-//
-//    let name: String
-//    var sensor_1: sensor{ didSet {didChange.send()}}
-//    var sensor_2: sensor{ didSet {didChange.send()}}
-//    var operation: Int{ didSet {didChange.send()}}
-//
-//    init(name:String, sensor_1:sensor, sensor_2: sensor, operation:Int){
-//        self.name = name
-//        self.sensor_1 = sensor_1
-//        self.sensor_2 = sensor_2
-//        self.operation = operation
-//        print("Initialized " + name)
-//    }
-//
-//    // Takes in sensor, attempts to add sensor to display.
-//    // If display is full, return false error message, else return good.
-//    func add_sensor(sensor:sensor) -> Int{
-//        if self.sensor_1.name == "Comming Soon"{
-//            self.sensor_1 = sensor
-//            return 0
-//        }
-//        else if self.sensor_2.name == "Comming Soon"{
-//            self.sensor_2 = sensor
-//            return 0
-//        }
-//        return 1
-//    }
-//
-//    // Takes in sensor, attempts to add sensor to display.
-//    // If display is full, return false error message, else return good.
-//    func remove_sensor(sensor:sensor) -> Int{
-//        if self.sensor_1.name == sensor.name{
-//            self.sensor_1 = dummy
-//            return 0
-//        }
-//        else if self.sensor_2.name == sensor.name{
-//            self.sensor_2 = dummy
-//            return 0
-//        }
-//        return 1
-//    }
-//
-//    //Output of display goes straight into graph in "Playground" sheet
-//    func show() -> String{
-//        let s_1: String = self.sensor_1.show()
-//        //let s_2: [String] = self.sensor_2.show()
-//        return s_1
-//    }
-//
-//}
-
 //default sensor
-let dummy = sensor(name: "Comming Soon", units: "", type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
+let dummy = sensor(name: "Comming Soon", units: "", type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon",img: "")
 
 //Sensors object used to keep track of all sensors
 class sensors: ObservableObject{
@@ -177,27 +127,25 @@ class sensors: ObservableObject{
         self.update_interval = update_interval
         
         //default sensor
-        self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon")
+        self.Dummy = sensor(name: "Comming Soon", units: "",type: "Comming Soon", val_1_name: "Comming Soon", val_2_name: "Comming Soon", val_3_name: "Comming Soon",img:"")
         
         //Initialize sensors if they are available, else set to dummy
-        self.accelerometer = self.motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/(s^2)", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll") : dummy
+        self.accelerometer = self.motionmanager.isAccelerometerAvailable ?  sensor(name: "Accelerometer", units:"m/(s^2)", type: "move", val_1_name: "pitch", val_2_name: "yaw", val_3_name: "roll",img: "accelerometer_img") : dummy
         
-        self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"rad/s", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.gyroscope = self.motionmanager.isGyroAvailable ? sensor(name: "Gyroscope", units:"rad/s", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z",img: "Gyro") : dummy
         
-        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"(10^-6)T", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z") : dummy
+        self.magnetometer = self.motionmanager.isMagnetometerAvailable ? sensor(name: "Magnetometer", units:"(10^-6)T", type: "move", val_1_name: "x", val_2_name: "y", val_3_name: "z",img: "Magnet") : dummy
+         
+        self.pressure = CMAltimeter.isRelativeAltitudeAvailable() ? sensor(name: "Pressure", units: "kpa", type: "move", val_1_name: "pressure", val_2_name: "", val_3_name: "",img: "Pressure") : dummy
         
-//        self.Display = display(name: "display", sensor_1: dummy, sensor_2: dummy, operation: 0)
-        
-        self.pressure = CMAltimeter.isRelativeAltitudeAvailable() ? sensor(name: "Pressure", units: "kpa", type: "move", val_1_name: "pressure", val_2_name: "", val_3_name: "") : dummy
-        
-        self.proximity = sensor(name: "Proximity", units: "Bool", type: "Detect", val_1_name: "isClose", val_2_name: "", val_3_name: "")
+        self.proximity = sensor(name: "Proximity", units: "Bool", type: "Detect", val_1_name: "isClose", val_2_name: "", val_3_name: "",img: "Loading")
         
         //Begin Sensing
-        self.begin_motion_sensing()
+        //self.begin_motion_sensing()
     }
     
     //Fetch Sensor Data from device
-    func begin_motion_sensing(){
+    func begin_motion_sensing() -> Void{
         //set update intervals
         self.motionmanager.deviceMotionUpdateInterval = self.update_interval
         
@@ -227,11 +175,185 @@ class sensors: ObservableObject{
         
         //Proximity Sensor
         UIDevice.current.isProximityMonitoringEnabled = true
-            
+        
         print("Now sensing motion")
+    }
+    
+    //Need stop motion sensing
+    func stop_motion_sensing() -> Void{
+        
+        //Stop Accelerometer and gyroscope updates
+        self.motionmanager.stopDeviceMotionUpdates()
+        
+        //Stop Magnetic Field Updates
+        self.motionmanager.stopMagnetometerUpdates()
+        
+        //Stop Pressure updates
+        self.altimeter.stopRelativeAltitudeUpdates()
+        
+        //Proximity Sensor
+        UIDevice.current.isProximityMonitoringEnabled = false
     }
 }
 
 //sensor group object used by app
 let sensor_list = sensors(update_interval: 0.1)
 
+//Display Elements
+struct chart_stuff {
+    var chart_data: [([Double],GradientColor)]
+    var title: String
+    
+}
+
+struct _sensor_view: View{
+    var sensor_data: [String]
+    let sensor_title: String
+    let img: String
+    var body: some View{
+        HStack{
+            Menu {
+                ForEach(0..<3){ i in
+                    if i < sensor_data.count{
+                        regular(data: sensor_data[i])
+                    }
+                }
+            } label: {
+                sub_title(data: sensor_title)
+            }
+            
+            Image(self.img)
+                .resizable()
+                .frame(width: 50, height: 50)
+                .cornerRadius(20)
+                .padding()
+        }
+    
+    }
+}
+
+
+
+// Page sections
+struct _purpose: View{
+    var data: String
+    var body: some View{
+        VStack{
+            sub_title(data: "Project Purpose")
+            little(data: "Bored Nerds is an app focused on educating bored individuals about sensors on their phone...")
+        }
+    }
+}
+
+struct _about_section: View{
+    var data: String
+    var body: some View{
+        VStack{
+            title(data: "About")
+        }
+    }
+}
+
+struct _about_the_author: View{
+    var data: String
+    var body: some View{
+        sub_title(data: "About the Author")
+        regular(data: "Imani Muhammad-Graham")
+        HStack{
+            Image("imani_pic")
+                .resizable()
+                .cornerRadius(20)
+                .scaledToFit()
+                .padding()
+            
+            Image("ub_bull")
+                .resizable()
+                .frame(width: 75.0,height: 75.0)
+                .cornerRadius(20)
+                .scaledToFit()
+                .padding()
+        }
+        Divider()
+        sub_title(data: "Code")
+        Link("Github", destination: URL(string: "https://github.com/Imani-ES/bored-nerds")!)
+        sub_title(data: "Connect")
+        Link("Linkedin", destination: URL(string:"https://www.linkedin.com/in/imani-muhammad-graham-424b4a127")!)
+        
+    }
+}
+
+struct _sources_section : View{
+    var data: String
+    var body: some View{
+        sub_title(data: "Sources")
+        ScrollView(.vertical, showsIndicators: true, content:{
+            VStack{
+                regular(data: "Apple Developer")
+                Link("Device Motion Sensors", destination: URL (string:  "https://developer.apple.com/documentation/coremotion/cmmotionmanager")!)
+                
+                regular(data: "Youtube/ Tutorials")
+                Link("Swift Programming", destination: URL(string: "https://www.youtube.com/watch?v=stSB04C4iS4")!)
+                Link("Swift Views", destination: URL (string:"https://www.youtube.com/watch?v=uC3X4FoielU")!)
+                Link("SwiftUI Charts", destination: URL(string: "https://www.youtube.com/watch?v=ARLy0rvyKz0")!)
+                
+                
+            }
+        })
+        
+    }
+}
+
+// Text Types
+struct title: View{
+    var data: String
+    var body: some View{
+        VStack{
+            Text(data)
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding()
+        }
+    }
+}
+
+struct sub_title: View{
+    var data: String
+    var body: some View{
+        VStack{
+            Text(data)
+                .font(.title2)
+                .multilineTextAlignment(.leading)
+                .foregroundColor(.gray)
+                .padding()
+        }
+    }
+}
+
+struct regular:View{
+    var data: String
+    var body: some View{
+        VStack{
+            Text(data)
+                .font(.body)
+                .multilineTextAlignment(.leading)
+                .padding()
+        }
+    }
+}
+
+struct little: View{
+    var data: String
+    var body: some View{
+        VStack{
+            Text(data)
+                .font(.caption2)
+                .multilineTextAlignment(.leading)
+        }
+    }
+}
+
+struct About_Previews: PreviewProvider {
+    static var previews: some View {
+        About()
+    }
+}

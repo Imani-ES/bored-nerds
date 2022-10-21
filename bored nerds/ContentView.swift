@@ -43,11 +43,11 @@ struct ContentView: View {
                     activepage = ._playground
                 }
             }
-            
-            
-            
-        }
+                        
+        }.onAppear( perform: (sensor_list.stop_motion_sensing))
+        
         .environmentObject(sensor_list)
+        
         .sheet(item: $activepage){item in
             switch item{
                 case ._about:

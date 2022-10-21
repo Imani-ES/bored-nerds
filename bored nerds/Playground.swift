@@ -9,9 +9,12 @@ import SwiftUI
 import SwiftUICharts
 
 struct Playground: View {
-    @State var selection: String = dummy.name
-    @State var chart_specs: chart_stuff = chart_stuff(chart_data:[([0.0],GradientColors.blue)], title: "Comming Soon")
+    @State var selection: String = sensor_list.accelerometer.name
+    
+    @State var chart_specs: chart_stuff = sensor_list.accelerometer.display()
+    
     var body: some View {
+        //Set up Timer: for ever 1 second, update sensor display values
         let _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             if selection == sensor_list.accelerometer.name{
                 chart_specs = sensor_list.accelerometer.display()
@@ -36,10 +39,12 @@ struct Playground: View {
                 
             }
         }
+        
         VStack{
             title(data: "Playground")
-            
-            sub_title(data: "Showing data from: \(selection)")
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.proximityStateDidChangeNotification)) { _ in
+                        sensor_list.proximity.update(data: UIDevice.current.proximityState ? [1.0] : [0.0])
+                    }
             Picker(
                 selection: $selection,
                 label: Text("Choose Your sensor!"),
@@ -59,14 +64,9 @@ struct Playground: View {
                 dropShadow: false
             )
             .padding(5)
-        }
+        }.onAppear( perform: (sensor_list.begin_motion_sensing))
         
     }
-    
-}
-struct chart_stuff {
-    var chart_data: [([Double],GradientColor)]
-    var title: String
     
 }
 
