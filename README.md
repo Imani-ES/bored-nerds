@@ -8,3 +8,5 @@ Features (Sensors):
 
 Pressure, Accelerometer, Magnetometer, Gyroscope, Proximity
 
+
+I didn't truly get environmental variables working properly. I also don't have much comments.
